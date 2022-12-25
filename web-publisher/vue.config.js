@@ -5,7 +5,7 @@ module.exports = {
       entry: 'src/main.js',
       template: 'public/index.html',
       filename: 'index.html',
-      title: 'BMSys'
+      title: 'E-Commerce'
     },
     login: {
       entry: 'src/login.js',
@@ -18,6 +18,15 @@ module.exports = {
       template: 'public/register.html',
       filename: 'register.html',
       title: 'Register User'
+    }
+  },
+  devServer: {
+    proxy: {
+      '^/api': {
+        target: 'http://localhost:8001/api/v1',
+        ws: true,
+        changeOrigin: true
+      }
     }
   }
 }

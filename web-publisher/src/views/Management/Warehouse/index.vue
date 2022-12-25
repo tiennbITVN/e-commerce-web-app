@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 import PageMixin from "@/common/mixins/PageMixin";
 import dataGrid from "@/common/components/dataGrid";
@@ -84,9 +83,6 @@ export default {
     }
   },
   mounted() {
-    axios.get('http://localhost:10909/external/whlst').then(res => {
-      console.log(res);
-    })
   },
   methods: {}
 };
