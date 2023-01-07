@@ -1,56 +1,55 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    authTyp: "",
-    token: "",
-    refreshToken: "",
-    profile: {
-      userid: "",
-      firstname: "",
-      lastname: "",
-      username: "",
-      avatar: "",
-      email: "",
-      phone: "",
-      address: null,
-      role: null
+    profile: { },
+    alert: {
+      status: false
     }
   },
   mutations: { 
-    initState(state, keycloak) {
-      state.token = keycloak.token;
-      state.refreshToken = keycloak.refreshToken;
-      state.authTyp = keycloak.tokenParsed.typ;
-
-      state.profile.userid = keycloak.tokenParsed.preferred_username;
-      state.profile.avatar = keycloak.tokenParsed.picture;
-      state.profile.firstname = keycloak.tokenParsed.given_name;
-      state.profile.lastname = keycloak.tokenParsed.family_name;
-      state.profile.username = keycloak.tokenParsed.name;
-      state.profile.email = keycloak.tokenParsed.email;
-      state.profile.phone = keycloak.tokenParsed.phone_number;
-      state.profile.address = keycloak.tokenParsed.address;
-      state.profile.role = keycloak.tokenParsed.resource_access.account.roles;
+    initUserProfile(state, profile) {
+      state.profile = profile;
+    },
+    cnvrtUserProfile(state, tokenParsed) {
+      state.profile.userid = tokenParsed.preferred_username;
+      state.profile.avatar = tokenParsed.picture;
+      state.profile.firstname = tokenParsed.given_name;
+      state.profile.lastname = tokenParsed.family_name;
+      state.profile.username = tokenParsed.name;
+      state.profile.email = tokenParsed.email;
+      state.profile.phone = tokenParsed.phone_number;
+      state.profile.address = tokenParsed.address;
+      state.profile.role = tokenParsed.resource_access.account.roles;
+    },
+    showAlert(state, opt) {
+      state.alert.status = true;
+      state.alert.msg = opt.msg;
+      state.alert.type = opt.type;
+      switch(opt.type) {
+        case "success": 
+          state.alert.color = "green";
+          state.alert.icon = "done";
+          break;
+        case "info": 
+          state.alert.color = "blue";
+          state.alert.icon = "info";  
+          break;
+        case "warning": 
+          state.alert.color = "orange";
+          state.alert.icon = "warning";
+          break;
+        case "error": 
+          state.alert.color = "red";
+          state.alert.icon = "error";
+          break;
+      };
+      setTimeout(() => {
+        state.alert.status = false;
+      }, 2000);
     }
-  },
-  actions: {
-    login(context, credentials) {
-      axios.post('', {
-        userId: credentials.username,
-        userPass: credentials.password
-      }).then(res => {
-        console.log(res);
-      }).catch(err => {
-        console.log(err);
-      })
-    }
-  },
-  modules: {
-
   }
 });

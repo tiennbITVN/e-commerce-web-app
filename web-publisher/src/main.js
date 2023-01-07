@@ -1,8 +1,9 @@
 import Vue from "vue";
 import VueLogger from "vuejs-logger";
+import VueApi from "@/framework/plugins/VueApi";
 
 import App from "./App.vue";
-import LoginFail from "./LoginFail.vue";
+import MsgFail from "./MsgFail.vue";
 
 import router from "@/framework/router";
 import store from "@/framework/store";
@@ -18,6 +19,12 @@ keycloak.init({
     if (!auth) {
         window.location.reload();
     } else {
+        Vue.use(VueApi, {
+            token: keycloak.token,
+            refreshToken: keycloak.refreshToken,
+            authTyp: keycloak.tokenParsed.typ,
+            loginUrl: keycloak.createLoginUrl()
+        });
         new Vue({
             router, store, vuetify,
             render: h => h(App, {props: {keycloak: keycloak}})
@@ -36,9 +43,10 @@ keycloak.init({
             Vue.$log.error("Failed to refresh token");
         });
     }, 6000);
-}).catch(() => {
+}).catch((auth) => {
+    Vue.$log.info(auth);
     new Vue({
         vuetify,
-        render: h => h(LoginFail)
+        render: h => h(MsgFail, {props: auth})
     }).$mount("#app");
 });

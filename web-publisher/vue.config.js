@@ -22,11 +22,28 @@ module.exports = {
   },
   devServer: {
     proxy: {
-      '^/api': {
-        target: 'http://localhost:8001/api/v1',
+      '/api': {
+        target: 'http://localhost:8001/api',
         ws: true,
         changeOrigin: true
+      // },
+      // '^/routes': {
+      //   target: 'http://localhost:8001/routes',
+      //   ws: true,
+      //   changeOrigin: true
+      // },
+      // '^/services': {
+      //   target: 'http://localhost:8001/services',
+      //   ws: true,
+      //   changeOrigin: true
       }
     }
-  }
+  },
+  // css: {
+  //   loaderOptions: {
+  //     css: {
+  //       additionalData: `@import "@/assets/style.global.css"`
+  //     }
+  //   }
+  // }
 }
